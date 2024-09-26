@@ -10,8 +10,14 @@ import CoreLocation
 
 struct Weather: Codable {
     let name: String
-    let main: WeatherCondition
+    let weatherCondition: WeatherCondition
     let weather: [WeatherDescription]
+    
+    private enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case weatherCondition = "main"
+        case weather = "weather"
+    }
 }
 
 struct WeatherCondition: Codable {

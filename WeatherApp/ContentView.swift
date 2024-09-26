@@ -32,13 +32,14 @@ struct ContentView: View {
             if let weather = weather {
                 Text("Weather in \(weather.name)")
                     .font(.title)
-                Text("Temperature: \(String(format: "%.1f", weather.main.temp))°C")
-                Text("Humidity: \(weather.main.humidity)%")
+                Text("Temperature: \(String(format: "%.1f", weather.weatherCondition.temp))°C")
+                Text("Humidity: \(weather.weatherCondition.humidity)%")
                 Text("Condition: \(weather.weather.first?.description ?? "")")
             } else if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
             }
+
             
             Spacer()
             
