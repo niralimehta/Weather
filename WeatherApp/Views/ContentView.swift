@@ -2,20 +2,18 @@
 //  ContentView.swift
 //  WeatherApp
 //
-//  Created by Nirali Mehta on 9/16/24.
+//  Created by Nirali Mehta on 9/27/24.
 //
 
 import SwiftUI
 import CoreLocation
 
 struct ContentView: View {
+    @ObservedObject var weatherViewModel = WeatherViewModel()
+    
     @StateObject var locationManager = LocationManager()
-    @State private var weather: Weather?
     @State private var city: String = ""
-    @State private var errorMessage: String?
-    
-    let weatherService = WeatherData()
-    
+        
     var body: some View {
         VStack {
             HStack {
@@ -24,20 +22,19 @@ struct ContentView: View {
                     .border(Color.gray)
                 
                 Button("Search") {
-                    fetchWeatherForCity()
+                    self.weatherViewModel.getWeatherForCity(city)
                 }
                 .padding()
             }
             
-            if let weather = weather {
+            if let weather = self.weatherViewModel.weather {
                 Text("Weather in \(weather.name)")
                     .font(.title)
                 Text("Temperature: \(String(format: "%.1f", weather.weatherCondition.temp))°C")
                 Text("Humidity: \(weather.weatherCondition.humidity)%")
                 Text("Condition: \(weather.weather.first?.description ?? "")")
-            } else if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
+            } else if let errorMessage = self.weatherViewModel.errorMessage {
+                FailedView(errorMessage: errorMessage)
             }
 
             
@@ -45,34 +42,13 @@ struct ContentView: View {
             
             if let location = locationManager.userLocation {
                 Button("Use Current Location") {
-                    fetchWeatherForLocation(location: location)
+                    self.weatherViewModel.getWeatherForLocation(location: location)
                 }
             }
         }
         .padding()
         .onAppear {
             loadLastSearchedCity()
-        }
-    }
-    
-    private func fetchWeatherForCity() {
-        weatherService.fetchWeather(byCity: city) { fetchedWeather in
-            if let fetchedWeather = fetchedWeather {
-                self.weather = fetchedWeather
-                saveLastSearchedCity()
-            } else {
-                self.errorMessage = "City not found or API error."
-            }
-        }
-    }
-    
-    private func fetchWeatherForLocation(location: CLLocation) {
-        weatherService.fetchWeather(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude) { fetchedWeather in
-            if let fetchedWeather = fetchedWeather {
-                self.weather = fetchedWeather
-            } else {
-                self.errorMessage = "Location weather data not found."
-            }
         }
     }
     
@@ -83,7 +59,7 @@ struct ContentView: View {
     private func loadLastSearchedCity() {
         if let savedCity = UserDefaults.standard.string(forKey: "lastSearchedCity") {
             self.city = savedCity
-            fetchWeatherForCity()
+            self.weatherViewModel.getWeatherForCity(city)
         }
     }
 }
