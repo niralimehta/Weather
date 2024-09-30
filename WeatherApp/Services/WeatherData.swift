@@ -16,7 +16,7 @@ enum NetworkError: Error {
 
 struct WeatherResponse {
     var weather: Weather
-    var iconData: Data
+    var iconData: Data?
 }
 
 class WeatherService {
@@ -47,6 +47,8 @@ class WeatherService {
                             completion(.failure(error))
                         }
                     }
+                } else {
+                    completion(.success(WeatherResponse(weather: weather, iconData: nil)))
                 }
             }
         }.resume()
@@ -78,6 +80,8 @@ class WeatherService {
                             completion(.failure(error))
                         }
                     }
+                } else {
+                    completion(.success(WeatherResponse(weather: weather, iconData: nil)))
                 }
             }
         }.resume()
