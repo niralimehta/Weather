@@ -11,6 +11,7 @@ import CoreLocation
 class WeatherViewModel : ObservableObject {
     
     @Published var weather: Weather?
+    @Published var weatherIconData: Data?
     @Published var errorMessage: String?
     
     private let weatherService = WeatherService()
@@ -24,7 +25,8 @@ class WeatherViewModel : ObservableObject {
             switch result {
             case .success(let weather):
                 DispatchQueue.main.async {
-                    self.weather = weather
+                    self.weather = weather.weather
+                    self.weatherIconData = weather.iconData
                 }
                 
             case .failure(let error):
@@ -42,7 +44,8 @@ class WeatherViewModel : ObservableObject {
             switch result {
             case .success(let weather):
                 DispatchQueue.main.async {
-                    self.weather = weather
+                    self.weather = weather.weather
+                    self.weatherIconData = weather.iconData
                 }
             case .failure(let error):
                 DispatchQueue.main.async {

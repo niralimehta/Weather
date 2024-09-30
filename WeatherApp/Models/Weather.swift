@@ -26,4 +26,6 @@ struct WeatherCondition: Codable {
 
 struct WeatherDescription: Codable {
     let description: String
+    let icon: String
+
 }

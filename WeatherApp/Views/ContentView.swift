@@ -10,7 +10,6 @@ import CoreLocation
 
 struct ContentView: View {
     @ObservedObject var weatherViewModel = WeatherViewModel()
-    
     @StateObject var locationManager = LocationManager()
     @State private var city: String = ""
         
@@ -26,17 +25,35 @@ struct ContentView: View {
                 }
                 .padding()
             }
+            .padding()
             
-            if let weather = self.weatherViewModel.weather {
-                Text("Weather in \(weather.name)")
-                    .font(.title)
-                Text("Temperature: \(String(format: "%.1f", weather.weatherCondition.temp))°C")
-                Text("Humidity: \(weather.weatherCondition.humidity)%")
-                Text("Condition: \(weather.weather.first?.description ?? "")")
-            } else if let errorMessage = self.weatherViewModel.errorMessage {
-                FailedView(errorMessage: errorMessage)
+            HStack() {
+                if let weather = self.weatherViewModel.weather {
+                    if let imageData = self.weatherViewModel.weatherIconData,
+                       let image = UIImage(data: imageData) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                            .aspectRatio(contentMode: .fit)
+                    } else {
+                        Image(systemName: "cloud.rain")
+                            .font(.system(size: 80, weight: .medium))
+                            .foregroundColor(.blue)
+                    }
+                    VStack {
+                        Text("Weather in \(weather.name)")
+                            .font(.title)
+                        Text("Temperature: \(String(format: "%.1f", weather.weatherCondition.temp))°C")
+                        Text("Humidity: \(weather.weatherCondition.humidity)%")
+                        Text("Condition: \(weather.weather.first?.description ?? "")")
+                    }
+                    
+                    
+                } else if let errorMessage = self.weatherViewModel.errorMessage {
+                    FailedView(errorMessage: errorMessage)
+                }
             }
-
+            .frame(maxWidth: .infinity)
             
             Spacer()
             
@@ -46,7 +63,6 @@ struct ContentView: View {
                 }
             }
         }
-        .padding()
         .onAppear {
             loadLastSearchedCity()
         }

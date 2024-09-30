@@ -18,4 +18,8 @@ extension URL {
         return URL(string:"https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(Constants.API_KEY)&units=metric")
 
     }
+    
+    static func getImageData(by code: String) -> URL? {
+        return URL(string:"https://openweathermap.org/img/wn/\(code)@2x.png")
+    }
 }
