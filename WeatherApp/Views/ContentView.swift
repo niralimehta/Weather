@@ -22,6 +22,7 @@ struct ContentView: View {
                 
                 Button("Search") {
                     self.weatherViewModel.getWeatherForCity(city)
+                    saveLastSearchedCity()
                 }
                 .padding()
             }
@@ -46,7 +47,6 @@ struct ContentView: View {
                         Text("Humidity: \(weather.weatherCondition.humidity)%")
                         Text("Condition: \(weather.weather.first?.description ?? "")")
                     }
-                    
                     
                 } else if let errorMessage = self.weatherViewModel.errorMessage {
                     FailedView(errorMessage: errorMessage)
