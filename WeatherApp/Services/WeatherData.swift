@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import SwiftUI
 
 enum NetworkError: Error {
     case badURL
@@ -16,7 +17,7 @@ enum NetworkError: Error {
 
 struct WeatherResponse {
     var weather: Weather
-    var iconData: Data?
+    var icon: UIImage?
 }
 
 class WeatherService {
@@ -37,20 +38,19 @@ class WeatherService {
                 return completion(.failure(.decodingError))
             }
             
-            DispatchQueue.main.async {
-                if let iconCode = weather.weather.first?.icon {
-                    self.fetchWeatherIcon(by: iconCode) { result in
-                        switch result {
-                        case .success(let data):
-                            completion(.success(WeatherResponse(weather: weather, iconData: data)))
-                        case .failure(let error):
-                            completion(.failure(error))
-                        }
+            if let iconCode = weather.weather.first?.icon {
+                self.fetchWeatherIcon(by: iconCode) { result in
+                    switch result {
+                    case .success(let data):
+                        completion(.success(WeatherResponse(weather: weather, icon: data)))
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                } else {
-                    completion(.success(WeatherResponse(weather: weather, iconData: nil)))
                 }
+            } else {
+                completion(.success(WeatherResponse(weather: weather, icon: nil)))
             }
+            
         }.resume()
     }
     
@@ -70,39 +70,43 @@ class WeatherService {
                 return completion(.failure(.decodingError))
             }
             
-            DispatchQueue.main.async {
-                if let iconCode = weather.weather.first?.icon {
-                    self.fetchWeatherIcon(by: iconCode) { result in
-                        switch result {
-                        case .success(let data):
-                            completion(.success(WeatherResponse(weather: weather, iconData: data)))
-                        case .failure(let error):
-                            completion(.failure(error))
-                        }
+            if let iconCode = weather.weather.first?.icon {
+                self.fetchWeatherIcon(by: iconCode) { result in
+                    switch result {
+                    case .success(let data):
+                        completion(.success(WeatherResponse(weather: weather, icon: data)))
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                } else {
-                    completion(.success(WeatherResponse(weather: weather, iconData: nil)))
                 }
+            } else {
+                completion(.success(WeatherResponse(weather: weather, icon: nil)))
             }
+            
         }.resume()
         
     }
     
-    func fetchWeatherIcon(by code: String, completion: @escaping (Result<Data, NetworkError>) -> Void) {
+    func fetchWeatherIcon(by code: String, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
+        // Check if the image is cached, read from cache.
+        if let cachedImage = ImageCache.shared.object(forKey: code as NSString) {
+            completion(.success(cachedImage))
+        }
+        
+        // Otherwise, download the image from url and store in cache.
         guard let url = URL.getImageData(by: code) else {
             completion(.failure(.badURL))
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else {
+            guard let data = data, let image = UIImage(data: data), error == nil else {
                 completion(.failure(.noData))
                 return
             }
-            
-            DispatchQueue.main.async {
-                completion(.success(data))
-            }
+            // Cache the image
+            ImageCache.shared.setObject(image, forKey: code as NSString)
+            completion(.success(image))
             
         }.resume()
         

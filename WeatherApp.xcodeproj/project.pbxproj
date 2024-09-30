@@ -21,6 +21,7 @@
 		E868C80C2CA733BF00257A1E /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E868C80B2CA733BF00257A1E /* URL+Extensions.swift */; };
 		E868C80F2CA73A0300257A1E /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E868C80E2CA73A0300257A1E /* WeatherViewModel.swift */; };
 		E868C8112CA9AB6000257A1E /* FailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E868C8102CA9AB6000257A1E /* FailedView.swift */; };
+		E86E07882CAAF119002D3517 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86E07872CAAF119002D3517 /* ImageCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		E868C80B2CA733BF00257A1E /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		E868C80E2CA73A0300257A1E /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		E868C8102CA9AB6000257A1E /* FailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailedView.swift; sourceTree = "<group>"; };
+		E86E07872CAAF119002D3517 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			children = (
 				E85501322C988468009714A0 /* LocationManager.swift */,
 				E868C8082CA72F9200257A1E /* Constants.swift */,
+				E86E07872CAAF119002D3517 /* ImageCache.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E86E07882CAAF119002D3517 /* ImageCache.swift in Sources */,
 				E85501332C988468009714A0 /* LocationManager.swift in Sources */,
 				E868C80C2CA733BF00257A1E /* URL+Extensions.swift in Sources */,
 				E85501092C988019009714A0 /* ContentView.swift in Sources */,

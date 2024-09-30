@@ -7,11 +7,12 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 class WeatherViewModel : ObservableObject {
     
     @Published var weather: Weather?
-    @Published var weatherIconData: Data?
+    @Published var weatherIconImage: UIImage?
     @Published var errorMessage: String?
     
     private let weatherService = WeatherService()
@@ -26,7 +27,7 @@ class WeatherViewModel : ObservableObject {
             case .success(let weather):
                 DispatchQueue.main.async {
                     self.weather = weather.weather
-                    self.weatherIconData = weather.iconData
+                    self.weatherIconImage = weather.icon
                 }
                 
             case .failure(let error):
@@ -45,7 +46,7 @@ class WeatherViewModel : ObservableObject {
             case .success(let weather):
                 DispatchQueue.main.async {
                     self.weather = weather.weather
-                    self.weatherIconData = weather.iconData
+                    self.weatherIconImage = weather.icon
                 }
             case .failure(let error):
                 DispatchQueue.main.async {

@@ -29,8 +29,7 @@ struct ContentView: View {
             
             HStack() {
                 if let weather = self.weatherViewModel.weather {
-                    if let imageData = self.weatherViewModel.weatherIconData,
-                       let image = UIImage(data: imageData) {
+                    if let image = self.weatherViewModel.weatherIconImage {
                         Image(uiImage: image)
                             .resizable()
                             .frame(width: 80, height: 80)
