@@ -9,3 +9,4 @@ Features added in the app:
 6. Cache icons in memory.
 7. Render weather icon either from cache or from api. 
 
+Given more time, could add UITest Cases and localization to the app.
